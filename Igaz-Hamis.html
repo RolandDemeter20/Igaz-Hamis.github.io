@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Igaz vagy Hamis</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .question {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .button {
+            width: 300px;
+            padding: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            margin: 10px;
+            border-radius: 10px;
+            transition: background-color 0.3s;
+        }
+        .true {
+            background-color: green;
+            color: white;
+        }
+        .false {
+            background-color: red;
+            color: white;
+        }
+        .true:hover {
+            background-color: darkgreen;
+        }
+        .false:hover {
+            background-color: darkred;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            visibility: hidden;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="question" id="question">Betöltés...</div>
+    <button class="button true" onclick="checkAnswer(true)">Igaz</button>
+    <button class="button false" onclick="checkAnswer(false)">Hamis</button>
+    <div class="result" id="result"></div>
+</div>
+<script>
+    const questions = [
+        { text: "Mr. Monopoly-nak sosem volt szemüvege.", answer: true },
+        { text: "A Föld a Nap körül kering.", answer: true },
+        { text: "A Macskák képesek úszni.", answer: true },
+        { text: "A Föld a legnagyobb bolygó a Naprendszerben.", answer: false },
+        { text: "A méhek nem tudnak repülni.", answer: false },
+        { text: "Az Eiffel-torony Kanadában található.", answer: false },
+        { text: "Mona Lisa valóbjában mosolyog a festményen.", answer: true },
+        { text: "A Walt Disnep intróban sosem repült be egy tündér.", answer: true },
+        { text: "A kutyák tudják, hogy milyen színű a világ.", answer: false },
+        { text: "A Nap egy csillag.", answer: true },
+        { text: "A pingvinek képesek repülni.", answer: false },
+        { text: "Pikachunak van egy fekete csík a farkában.", answer: false },
+        { text: "A Nap egy csillag.", answer: true },
+        { text: "A gyümölcsök általában édes ízűek.", answer: true },
+        { text: "A víz fagyáspontja 0 Celsius-fok.", answer: true },
+        { text: "Az emberek képesek lélegezni víz alatt.", answer: false },
+        { text: "A Jurassic Parkban a dinoszauruszok valójában nem tudnak kosarazni.", answer: true },
+        { text: "A Star Warsban a Jedik fegyvere a lézerkard.", answer: false },
+        { text: "A Forrest Gumpban a futás nem megoldás a problémára, de jó formában tart.", answer: true },
+        { text: "A Halálos irambanban a legtöbb versenyző nem családtag.", answer: false },
+        { text: "A Valódi Aladdinban sosem volt repülő szőnyeg.", answer: true },
+        { text: "A Verdákban az autók nem járnak tankolni.", answer: false }
+    ];
+
+    let remainingQuestions = [...questions];
+
+    function loadQuestion() {
+        const questionDiv = document.getElementById("question");
+        const resultDiv = document.getElementById("result");
+
+        if (remainingQuestions.length === 0) {
+            questionDiv.innerText = "Vége a játéknak!";
+            resultDiv.innerText = "Minden kérdés megválaszolva.";
+            resultDiv.style.visibility = "visible";
+            document.querySelector(".true").disabled = true;
+            document.querySelector(".false").disabled = true;
+            return;
+        }
+
+        const randomIndex = Math.floor(Math.random() * remainingQuestions.length);
+        const currentQuestion = remainingQuestions[randomIndex];
+
+        questionDiv.innerText = currentQuestion.text;
+        window.currentQuestion = currentQuestion;
+        remainingQuestions.splice(randomIndex, 1);
+    }
+
+    function checkAnswer(userAnswer) {
+        const correctAnswer = window.currentQuestion.answer;
+        const resultDiv = document.getElementById("result");
+
+        if (userAnswer === correctAnswer) {
+            resultDiv.innerText = "Helyes válasz!";
+            resultDiv.style.color = "green";
+        } else {
+            resultDiv.innerText = `Rossz válasz! A helyes válasz: ${correctAnswer ? "Igaz" : "Hamis"}`;
+            resultDiv.style.color = "red";
+        }
+
+        resultDiv.style.visibility = "visible";
+
+        setTimeout(() => {
+            resultDiv.style.visibility = "hidden";
+            loadQuestion();
+        }, 1500);
+    }
+
+    window.onload = loadQuestion;
+</script>
+</body>
+</html>
